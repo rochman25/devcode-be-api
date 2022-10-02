@@ -48,7 +48,36 @@ async function getOne(req, res, next) {
     }
 }
 
+async function destroy(req, res, next) {
+    try {
+        const id = req.params.id;
+        const todo = await db.Todo.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (todo === null) {
+            return res.json({
+                status: 'Not Found',
+                message: `Todo with ID ${id} Not Found`,
+                data: {}
+            },404);
+        }
+
+        await todo.destroy();
+        return res.json({
+            status: 'Success',
+            message: 'Success',
+            data: {},
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     get,
     getOne,
+    destroy,
 };

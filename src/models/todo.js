@@ -26,13 +26,16 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       }
     },
-    is_active: DataTypes.BOOLEAN,
+    is_active: DataTypes.STRING,
     priority: DataTypes.STRING,
   }, {
     sequelize,
+    tableName: 'todos',
     modelName: 'Todo',
     paranoid: true,
-    deleted_at: 'destroyTime'
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at'
   });
   return Todo;
 };

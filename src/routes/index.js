@@ -12,6 +12,8 @@ router.delete('/activity-groups/:id', activityController.destroy);
 
 router.get('/todo-items', todoController.get);
 router.get('/todo-items/:id', todoController.getOne);
+router.post('/todo-items', todoController.post);
+router.patch('/todo-items/:id', todoController.update);
 router.delete('/todo-items/:id', todoController.destroy);
 
 module.exports = router;

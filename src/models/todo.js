@@ -19,11 +19,21 @@ module.exports = (sequelize, DataTypes) => {
   Todo.init({
     activity_group_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'activity_group_id cannot be null'
+        },
+      }
     },
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: true,
+        notNull: {
+          msg: 'activity_group_id cannot be null'
+        },
       }
     },
     is_active: DataTypes.STRING,

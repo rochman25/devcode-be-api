@@ -26,14 +26,17 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       validate: {
-        notNull: true,
+        notEmpty: true,
       }
     },
-    deleted_at: 'destroyTime',
   }, {
     sequelize,
+    tableName: 'activities',
     modelName: 'Activity',
     paranoid: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at'
   });
   return Activity;
 };

@@ -19,23 +19,20 @@ module.exports = (sequelize, DataTypes) => {
   Todo.init({
     activity_group_id: {
       type: DataTypes.INTEGER,
-      validate: {
-        notNull: true,
-      }
     },
     title: {
       type: DataTypes.STRING,
       validate: {
-        notNull: true,
+        notEmpty: true,
       }
     },
     is_active: DataTypes.BOOLEAN,
     priority: DataTypes.STRING,
-    deleted_at: 'destroyTime',
   }, {
     sequelize,
     modelName: 'Todo',
     paranoid: true,
+    deleted_at: 'destroyTime'
   });
   return Todo;
 };

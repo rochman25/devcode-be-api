@@ -110,9 +110,9 @@ function errorHandlerMiddleware(error, request, response, next) {
 	 * If response headers have already been sent,
 	 * delegate to the default Express error handler.
 	 */
-  if (response.headersSent) {
-    return next(error);
-  }
+//   if (response.headersSent) {
+//     return next(error);
+//   }
 
   const errorResponse = {
     status: error.statusMessage,

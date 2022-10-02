@@ -36,7 +36,7 @@ async function getOne(req, res, next) {
                 status:'Not Found',
                 message: `Todo Item with ID ${id} Not Found`,
                 data:{}
-            });
+            },404);
         }
         res.json({
             status: 'Success',

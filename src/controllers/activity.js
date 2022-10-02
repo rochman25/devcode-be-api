@@ -3,7 +3,7 @@ const db = require('../models');
 async function get(req, res, next) {
     try {
         const data = await db.Activity.findAll();
-        res.json({
+        return res.json({
             status: 'Success',
             message: 'Success',
             data,
@@ -21,14 +21,14 @@ async function getOne(req, res, next) {
                 id
             }
         });
-        if(data === null){
-            res.json({
-                status:'Not Found',
+        if (data === null) {
+            return res.json({
+                status: 'Not Found',
                 message: `Activity with ID ${id} Not Found`,
-                data:{}
-            });
+                data: {}
+            },404);
         }
-        res.json({
+        return res.json({
             status: 'Success',
             message: 'Success',
             data,
@@ -48,15 +48,15 @@ async function post(req, res, next) {
             title,
             email
         }).then((item) => {
-            res.json({
+            return res.json({
                 status: 'Success',
                 message: 'Success',
                 data: item,
             });
         }).catch((error) => {
-            if (error.errors.length > 0) {
+            if (typeof error.errors !== undefined && error.errors.length > 0) {
                 let messages = "";
-                error.errors.forEach(function(item){
+                error.errors.forEach(function (item) {
                     messages = messages.concat(item.message);
                 });
                 let errorStatus = {
@@ -76,45 +76,87 @@ async function post(req, res, next) {
 
 async function update(req, res, next) {
     try {
-        const user = await db.User.findOne({
+        const id = req.params.id;
+        const activity = await db.Activity.findOne({
             where: {
-                id: req.params.id
+                id
             }
         });
+
+        if (activity === null) {
+            return res.json({
+                status: 'Not Found',
+                message: `Activity with ID ${id} Not Found`,
+                data: {}
+            },404);
+        }
+
         const {
-            firstName,
-            lastName,
-            age
+            title,
+            email
         } = req.body;
-        await user.update({
-            firstName,
-            lastName,
-            age,
+        if(req.body.title == null){
+            let errorStatus = {
+                statusMessage: "Bad Request",
+                statusCode: 400,
+                stack: "title cannot be null",
+            }
+            return next(errorStatus);
+        }
+        await activity.update({
+            title,
+            email,
         });
-        await user.save();
-        res.json({
-            status: 'success',
-            message: 'Successfully updated user data',
-            code: 200,
-            data: user,
+        await activity.save();
+        return res.json({
+            status: 'Success',
+            message: 'Success',
+            data: activity,
         });
     } catch (error) {
-        next(error);
+        if (typeof error.errors != 'undefined') {
+            if (typeof error.errors.length != 'undefined' && error.errors.length > 0) {
+                let messages = "";
+                error.errors.forEach(function (item) {
+                    messages = messages.concat(item.message);
+                });
+                let errorStatus = {
+                    statusMessage: "Bad Request",
+                    statusCode: 400,
+                    stack: messages,
+                }
+                next(errorStatus);
+            } else {
+                next(error.message);
+            }
+        } else {
+            next(error.message);
+        }
     }
 }
 
 async function destroy(req, res, next) {
     try {
-        await db.User.destroy({
+        const id = req.params.id;
+        const activity = await db.Activity.findOne({
             where: {
-                id: req.params.id
-            },
+                id
+            }
         });
-        res.json({
-            status: 'success',
-            message: 'Successfully delete user data',
-            code: 200,
-            data: [],
+
+        if (activity === null) {
+            return res.json({
+                status: 'Not Found',
+                message: `Activity with ID ${id} Not Found`,
+                data: {}
+            },404);
+        }
+
+        await activity.destroy();
+        return res.json({
+            status: 'Success',
+            message: 'Success',
+            data: {},
         });
     } catch (error) {
         next(error);

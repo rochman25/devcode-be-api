@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Activities', {
+    await queryInterface.createTable('activities', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -28,12 +28,12 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE
       }
-    }).then(() => queryInterface.addIndex('Activities',['email','id'],{
+    }).then(() => queryInterface.addIndex('activities',['email','id'],{
       fields: 'email',
       unique: true,
     }));
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Activities');
+    await queryInterface.dropTable('activities');
   }
 };

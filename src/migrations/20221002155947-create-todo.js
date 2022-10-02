@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Todos', {
+    await queryInterface.createTable('todos', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,7 +11,7 @@ module.exports = {
       activity_group_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Activities', key: 'id' }
+        references: { model: 'activities', key: 'id' }
       },
       title: {
         allowNull: false,
@@ -35,9 +35,9 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE
       }
-    }).then(() => queryInterface.addIndex('Todos',['activity_group_id','id','is_active']));
+    }).then(() => queryInterface.addIndex('todos',['activity_group_id','id','is_active']));
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Todos');
+    await queryInterface.dropTable('todos');
   }
 };

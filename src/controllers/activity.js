@@ -41,24 +41,30 @@ async function getOne(req, res, next) {
 async function post(req, res, next) {
     try {
         const {
-            firstName,
-            lastName,
-            age
+            title,
+            email
         } = req.body;
-        await db.User.create({
-            firstName,
-            lastName,
-            age,
+        await db.Activity.create({
+            title,
+            email
         }).then((item) => {
             res.json({
-                status: 'success',
-                message: 'Successfully create new user',
-                code: 200,
+                status: 'Success',
+                message: 'Success',
                 data: item,
             });
         }).catch((error) => {
-            if (error.name === 'SequelizeUniqueConstraintError') {
-                next(error.errors[0].message);
+            if (error.errors.length > 0) {
+                let messages = "";
+                error.errors.forEach(function(item){
+                    messages = messages.concat(item.message);
+                });
+                let errorStatus = {
+                    statusMessage: "Bad Request",
+                    statusCode: 400,
+                    stack: messages,
+                }
+                next(errorStatus);
             } else {
                 next(error.message);
             }

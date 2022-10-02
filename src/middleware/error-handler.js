@@ -115,6 +115,7 @@ function errorHandlerMiddleware(error, request, response, next) {
   }
 
   const errorResponse = {
+    status: error.statusMessage,
     statusCode: getHttpStatusCode({ error, response }),
     body: undefined,
   };
@@ -158,7 +159,7 @@ function errorHandlerMiddleware(error, request, response, next) {
 			 * Response header: `Content-Type: `application/json`
 			 */
       response.json({
-        status: 'error', message: errorResponse.body, code: errorResponse.statusCode, data: null,
+        status: errorResponse.status, message: errorResponse.body, data: {},
       });
     },
     /**
@@ -170,7 +171,7 @@ function errorHandlerMiddleware(error, request, response, next) {
 			 * Response header: `Content-Type: text/plain`
 			 */
       response.json({
-        status: 'error', message: errorResponse.body, code: errorResponse.statusCode, data: null,
+        status: errorResponse.status, message: errorResponse.body, data: {},
       });
     },
   });
